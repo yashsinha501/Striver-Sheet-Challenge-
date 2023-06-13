@@ -1,0 +1,28 @@
+Node* removeKthNode(Node* head, int K)
+
+{
+    if(K==0)return head;
+    Node* first=head;
+    Node* second=head;
+    Node* ans=head;
+    Node* s=head;
+    int cnt=0;
+    while(s!=NULL)
+    {
+        s=s->next;
+        cnt++;
+    }
+    if(K==cnt)return head->next;
+    for(int i=1;i<=K;i++)
+    {
+        first=first->next;
+    }
+    while(first->next!=NULL)
+    {
+        first=first->next;
+        second=second->next;
+    }
+    second->next=second->next->next;
+    return ans;
+
+}
