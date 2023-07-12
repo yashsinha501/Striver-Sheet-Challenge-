@@ -1,0 +1,17 @@
+#include <bits/stdc++.h> 
+int uniqueSubstrings(string input)
+{
+    //Write your code here
+    int lo=0;
+    int ml=0;
+    unordered_map<char,int> um;
+    for(int i=0;i<input.size();i++){
+        um[input[i]]++;
+        while(um[input[i]]>1){
+             um[input[lo]]--;
+             lo++;
+        }
+        ml=max(ml,i-lo+1);
+    }
+    return ml;
+}
