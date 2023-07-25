@@ -1,77 +1,93 @@
 #include<bits/stdc++.h>
+
+using namespace std;
+
+ 
+
 class LRUCache
+
 {
+
+    int capacity;
+
+    unordered_map<int, list<pair<int,int>>::iterator> m;
+
+    list<pair<int,int>> l;
+
 public:
-   vector<int> q;
-   int cap;
-   int size;
-   int idx;
-   unordered_map<int,int> mp;
-   LRUCache(int capacity)
-   {
-       cap=capacity;
-       size=0;
-       idx=0;
-   }
 
-   int get(int key)
-   {
-       if(mp.find(key)!=mp.end()){
-           for(int i=0;i<q.size();i++){
-               if(q[i]==key){
-                   q[i]=-1;
-                   break;
-               }
-           }
-           q.push_back(key);
-           return mp[key];
-       }
-       return -1;
-   }
+    LRUCache(int capacity)
 
-   void put(int key, int value)
-   {
-        if(size<cap){
-           if(mp.find(key)!=mp.end()){
-               mp[key]=value;
-               for(int i=0;i<q.size();i++){
-                   if(q[i]==key){
-                       q[i]=-1;
-                       break;
-                   }
-               }
-               q.push_back(key);
-           }
-           else{
-               q.push_back(key);
-               mp[key]=value;
-               size++;
-           }
-           
-       }
-       else {
-           if(mp.find(key)!=mp.end()){
-               mp[key]=value;
-               for(int i=0;i<q.size();i++){
-                   if(q[i]==key){
-                       q[i]=-1;
-                       break;
-                   }
-               }
-               q.push_back(key);
-           }
-           else{
-               for(int i=0;i<q.size();i++){
-                   if(q[i]!=-1){
-                       idx=i;
-                       break;
-                   }
-               }
-               mp.erase(q[idx]);
-               q[idx]=-1;
-               q.push_back(key);
-               mp[key]=value;
-           }
-       }
-   }
+    {
+
+        this->capacity = capacity;
+
+    }
+
+ 
+
+    int get(int key)
+
+    {
+
+        if(m.find(key) == m.end())
+
+            return -1;
+
+        else{
+
+            auto element = m[key];
+
+            int val = element->second;
+
+            l.erase(element);
+
+ 
+
+            l.push_front({key, val});
+
+            m[key] = l.begin();
+
+            return val;
+
+        }
+
+    }
+
+ 
+
+    void put(int key, int value)
+
+    {
+
+        if(m.find(key) != m.end()){
+
+            l.erase(m[key]);
+
+            m.erase(key);
+
+        }
+
+ 
+
+        if(capacity == l.size()){
+
+            pair<int, int> last = l.back();
+
+            l.erase(m[last.first]);
+
+            m.erase(last.first);
+
+        }
+
+ 
+
+        l.push_front({key, value});
+
+        m[key] = l.begin();
+
+    }
+
 };
+
+ 
