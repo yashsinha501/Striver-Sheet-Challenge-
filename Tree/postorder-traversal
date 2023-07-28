@@ -1,0 +1,17 @@
+#include <bits/stdc++.h> 
+
+vector<int> post;
+void postorder(TreeNode* root){
+    if(root==NULL) return;
+    postorder(root->left);
+    postorder(root->right);
+    post.push_back(root->data);
+}
+vector<int> getPostOrderTraversal(TreeNode *root)
+{
+    // Write your code here.
+    post.clear();
+    postorder(root);
+    return post;
+
+}
