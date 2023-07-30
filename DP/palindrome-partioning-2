@@ -1,41 +1,48 @@
 
-bool isPalindrome(string str, int i, int j)
-{
-    while (i <= j)
-    {
-        if (str[i++] != str[j--])
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-
-int minPalinPartition(string str, int i, int j)
-{
-
-    if (i == j || isPalindrome(str, i, j))
-    {
-        return 0;
-    }
-
-    int min = INT_MAX;
-
-    for (int k = i; k <= j - 1; k++)
-    {
-        int count = 1 + minPalinPartition(str, i, k) + minPalinPartition(str, k + 1, j);
-        if (count < min)
-        {
-            min = count;
-        }
-    }
-
-    return min;
-}
-
 int palindromePartitioning(string str)
 {
     int n = str.size();
-    return minPalinPartition(str, 0, n - 1);
+
+    int cuts[n];
+    bool isPalindrome[n][n];
+
+    int i, j, k, l; 
+    for (i = 0; i < n; i++)
+    {
+        isPalindrome[i][i] = true;
+    }
+
+    for (l = 2; l <= n; l++)
+    {
+        for (i = 0; i < n - l + 1; i++)
+        {
+            j = i + l - 1;  
+            if (l == 2)
+            {
+                isPalindrome[i][j] = (str[i] == str[j]);
+            }
+            else
+            {
+                isPalindrome[i][j] = (str[i] == str[j]) && isPalindrome[i + 1][j - 1];
+            }
+        }
+    }
+
+    for (i = 0; i < n; i++)
+    {
+        if (isPalindrome[0][i] == true)
+        {
+            cuts[i] = 0;
+        }
+        else
+        {
+            cuts[i] = INT_MAX;
+            for (j = 0; j < i; j++)
+            {
+                if (isPalindrome[j + 1][i] == true && 1 + cuts[j] < cuts[i]) cuts[i] = 1 + cuts[j];
+            }
+        }
+    }
+
+    return cuts[n - 1];
 }
